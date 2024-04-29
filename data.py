@@ -53,17 +53,13 @@ conn.commit()
 
 # artists, artists2, artists3 contains 100 artists from top billboard
 artists = artist_retrieval()
-# artists2 = artists.copy()
-# artists3 = artists.copy()
 
-# gather data from apis 
-print("gathering data...")
+# gather data from apis
 spotify_artists = gather_spotify_artist_info(artists)
 spotify_songs = gather_spotify_songs(spotify_artists)
 itunes_artists = gather_itunes_artist_info(artists)
 itunes_songs = gather_itunes_songs(itunes_artists)
 
-print("populating data base...")
 # populate artists tables by calling the three functions 4 times
 for i in range(0,4):
     artist_table(artists)
@@ -71,6 +67,7 @@ for i in range(0,4):
     spotify_tables(spotify_songs, False)
     itunes_tables(itunes_artists, True)
     itunes_tables(itunes_songs, False)
+
 
 # get tuples of data from api and save as a list
 # spotify_info = gather_spotify_artist_info(artists)

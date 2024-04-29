@@ -4,31 +4,51 @@ import requests
 import sqlite3
 
 def gather_itunes_artist_info(artists):
+    # list will hold data
     l = []
+    # iterate artist names
     for artist in artists:
+        # search for artist name
         url = f"https://itunes.apple.com/search?term={artist}&entity=musicArtist&limit=1"
         res = requests.get(url)
+        # if the request goes through gather the data
         if res.ok:
             data = res.json()
+            # get the itunes id & genre
             it_id = data['results'][0]['artistId']
             gen = data['results'][0]['primaryGenreName']
             l.append((it_id, gen))
-            print("was appended successfully")
         else:
+            # if response is error then print error and gather null data
             print(f"res:{res} for {artist}")
             l.append((None, None))
+    # return the list
     return l
 
-# gather_itunes_artist_info(['Stray Kids', 'Beyonce'])
 
 def gather_itunes_songs(artists_info):
+    # empty list
+    l = []
+    # iterate artist info
     for artist in artists_info:
-        url = f"https://itunes.apple.com/search?term={artist[0]}&entity=song"
+        # look for artist id
+        url = f"https://itunes.apple.com/lookup?id={artist[0]}&entity=song"
         res = requests.get(url)
         data = res.json()
-        print(data['results'][0])
+        # go thru results
+        for d in data['results']:
+            # if the result type is a song and its artist is the same
+            if d['wrapperType'] == 'track' and d['artistId'] == artist[0]:
+                # set name and duration of song
+                name = d['trackName']
+                dur = d['trackTimeMillis']
+                # add it to the list
+                l.append((name, dur))
+                # exit because we are only getting the first song
+                break
+    # return the list of songs and their duration
+    return l
 
-# gather_itunes_songs([()])
 
 def itunes_tables(artists_info, art_table):
     # set up conn

@@ -90,13 +90,19 @@ def gather_spotify_artist_info(artists):
 
 
 def gather_spotify_songs(artists_info):
+    # list will hold tuples of songs
     l = []
+    # iterate artist tuple info
     for artist in artists_info:
+        # get artist spotify_id
         art = f'spotify:artist:{artist[0]}'
+        # find top_tracks
         res = sp.artist_top_tracks(art)
         name = res['tracks'][0]['name']
         dur = res['tracks'][0]['duration_ms']
+        # add top song name + duration to list
         l.append((name, dur))
+    # return list of tuples
     return l
 
 # this func populates the database
