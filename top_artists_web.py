@@ -1,31 +1,9 @@
-# spotify api data collecting
-
-# import spotipy
-# from spotipy.oauth2 import SpotifyClientCredentials
-
-# auth_manager = SpotifyClientCredentials()
-# sp = spotipy.Spotify(auth_manager=auth_manager)
-
-# playlists = sp.user_playlists('spotify')
-# while playlists:
-#     for i, playlist in enumerate(playlists['items']):
-#         print("%4d %s %s" % (i + 1 + playlists['offset'], playlist['uri'],  playlist['name']))
-#     if playlists['next']:
-#         playlists = sp.next(playlists)
-#     else:
-#         playlists = None
-
 # web scrape billboard top 100
-
 from bs4 import BeautifulSoup
 import requests
 import sqlite3
-import json
-import re
-import os
-import csv
-import unittest
 
+# might need to place this function in a different file because if we call this file four times, it will restart the list every time
 def artist_retrieval():
     # set file to billboard top 100 artists
     html_url = "https://www.billboard.com/charts/artist-100/"
@@ -44,24 +22,18 @@ def artist_retrieval():
     # return the list of artists
     return artist_list
 
-
-def artist_db(artists):
+# this creates a database called music and fills a table with artists from top billboard
+def artist_table(artists):
     # set up conn
-    conn = sqlite3.connect('artists.db')
+    conn = sqlite3.connect('music.db')
     # set up cur
     cur = conn.cursor()
-    # create table
-    cur.execute(
-        "CREATE TABLE IF NOT EXISTS artists (artist_id INTEGER PRIMARY KEY, artist_name TEXT UNIQUE)"
-    )
-    # commit changes
-    conn.commit()
     # iterate through list until nothing is left
     for i in range(0,25):
         name = artists[i]
         # insert artist name into database
         cur.execute(
-            "INSERT OR IGNORE INTO artists (artist_name) VALUES (?)", (name, )
+            "INSERT OR IGNORE INTO artists (name) VALUES (?)", (name, )
         )
     # commit changes
     conn.commit()
@@ -69,12 +41,3 @@ def artist_db(artists):
     del artists[:25]
     # close connection
     conn.close()
-    l = artists
-    return l
-
-
-# artists = artist_retrieval()
-# artist_db(artists)
-# artist_db(artists)
-# artist_db(artists)
-# artist_db(artists)
