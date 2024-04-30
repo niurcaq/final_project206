@@ -1,17 +1,17 @@
 ﻿Genre,Avg Length of Songs(min)
-trap queen,5.32
-rock,4.2
-reggae,3.95
-k-pop,3.71
-indie,3.58
-rap,3.57
-r&b,3.56
-pop,3.45
-country,3.37
-neo soul,3.08
-sad sierreno,2.88
-alt z,2.86
-None,2.81
-reggaeton,2.71
-corrido,2.53
 southern hip hop,2.3
+corrido,2.53
+reggaeton,2.71
+None,2.81
+alt z,2.86
+sad sierreno,2.88
+neo soul,3.08
+country,3.37
+pop,3.45
+r&b,3.56
+rap,3.57
+indie,3.58
+k-pop,3.71
+reggae,3.95
+rock,4.2
+trap queen,5.32

@@ -3,6 +3,7 @@ from top_artists_web import artist_retrieval, artist_table
 from spotify_api import gather_spotify_artist_info, gather_spotify_songs, spotify_tables
 from itunes_api import gather_itunes_artist_info, gather_itunes_songs, itunes_tables
 from calculations import avg_time_per_genre_itunes, avg_time_per_genre_spotify, genre_percentages_itunes, genre_percentages_spotify
+from visuals import read_spotify_data, read_itunes_data, read_itunes_percentages, read_spotify_percentages
 
 # this function drops and creates a table with table_name & certain columns
 def drop_and_create(table_name, columns):
@@ -51,3 +52,9 @@ genre_percentages_spotify(cur)
 genre_percentages_itunes(cur)
 
 conn.close()
+
+# create visuals
+read_spotify_data()
+read_itunes_data()
+read_itunes_percentages()
+read_spotify_percentages()
