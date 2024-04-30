@@ -1,31 +1,17 @@
 ﻿Genre,Percentage
+pop,30
+country,17
+rock,14
+rap,13
+indie,7
 None,4
-alt z,1
-classic oklahoma country,1
-contemporary country,2
-corrido,1
-country,3
-country dawn,1
-country rap,1
-indie pop,3
-k-pop,2
-kentucky indie,1
-maga rap,1
-modern country pop,8
-neo soul,1
-outlaw country,1
-pop,27
-pop r&b,1
-pop rap,1
-pov: indie,3
 r&b,3
-rap,11
-reggae,1
-reggaeton,1
-rock,13
-sad sierreno,2
-singer-songwriter pop,1
-soft rock,1
 southern hip hop,2
+sad sierreno,2
+k-pop,2
 trap queen,1
-viral rap,1
+reggaeton,1
+reggae,1
+neo soul,1
+corrido,1
+alt z,1

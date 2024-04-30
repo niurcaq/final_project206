@@ -8,6 +8,7 @@ sp = spotipy.Spotify(auth_manager=auth_manager)
 
 # this func gets the shortest genre so we avoid stuff like "modern Kentucky country rap"
 def shortest_genre(genres):
+    l = ['country', 'r&b', 'pop', 'indie', 'rock', 'rap']
     # if no genres exist for the artist set genre to null by returning none
     if len(genres) == 0:
         return None
@@ -18,7 +19,13 @@ def shortest_genre(genres):
         # if current genre is less than current min, set min to current genre
         if len(genre) < len(minG):
             minG = genre
-    # return min genre
+    # get the words to split
+    for w in minG.split(' '):
+        # if the first word is in the list then set it as the genre
+        if w in l:
+            minG = w
+            break
+
     return minG
 
 # this func calls spotify api to get data on artists

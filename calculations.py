@@ -27,7 +27,7 @@ def avg_time_per_genre_itunes(cur):
 def genre_percentages_spotify(cur):
     # percentage in each genre for spotify
     cur.execute(
-        "SELECT A.genre, COUNT(*) FROM spotify_artists AS A GROUP BY A.genre"
+        "SELECT A.genre, COUNT(*) FROM spotify_artists AS A GROUP BY A.genre ORDER BY COUNT(*) DESC"
     )
     rows = cur.fetchall()
     # write data into text file
@@ -39,7 +39,7 @@ def genre_percentages_spotify(cur):
 def genre_percentages_itunes(cur):
     # percentage of each genre for itunes
     cur.execute(
-        "SELECT A.genre, COUNT(*) FROM itunes_artists AS A GROUP BY A.genre"
+        "SELECT A.genre, COUNT(*) FROM itunes_artists AS A GROUP BY A.genre ORDER BY COUNT(*) DESC"
     )
     rows = cur.fetchall()
     # write data into text file
