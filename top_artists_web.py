@@ -1,7 +1,6 @@
 # web scrape billboard top 100
 from bs4 import BeautifulSoup
 import requests
-import sqlite3
 
 # might need to place this function in a different file because if we call this file four times, it will restart the list every time
 def artist_retrieval():
@@ -23,11 +22,7 @@ def artist_retrieval():
     return artist_list
 
 # this creates a database called music and fills a table with artists from top billboard
-def artist_table(artists):
-    # set up conn
-    conn = sqlite3.connect('music.db')
-    # set up cur
-    cur = conn.cursor()
+def artist_table(cur, conn, artists):
     # iterate through list until nothing is left
     for i in range(0,25):
         name = artists[i]

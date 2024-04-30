@@ -19,7 +19,7 @@ cur = conn.cursor()
 drop_and_create('artists', 'artist_id INTEGER PRIMARY KEY, name TEXT UNIQUE')
 drop_and_create('spotify_artists', 'artist_id INTEGER PRIMARY KEY, spotify_id TEXT UNIQUE, genre TEXT, popularity INTEGER')
 drop_and_create('spotify_songs', 'artist_id INTEGER PRIMARY KEY, name TEXT, length INTEGER')
-drop_and_create('itunes_artists', 'artist_id INTEGER PRIMARY KEY, itunes_id INTEGER, genre TEXT')
+drop_and_create('itunes_artists', 'artist_id INTEGER PRIMARY KEY, itunes_id INTEGER UNIQUE, genre TEXT')
 drop_and_create('itunes_songs', 'artist_id INTEGER PRIMARY KEY, name TEXT, length INTEGER')
 
 # commit changes
@@ -36,9 +36,9 @@ itunes_songs = gather_itunes_songs(itunes_artists)
 
 # populate artists tables by calling the three functions 4 times
 for i in range(0,4):
-    artist_table(artists)
-    spotify_tables(spotify_artists, True)
-    spotify_tables(spotify_songs, False)
-    itunes_tables(itunes_artists, True)
-    itunes_tables(itunes_songs, False)
+    artist_table(cur, conn, artists)
+    spotify_tables(cur, conn, spotify_artists, True)
+    spotify_tables(cur, conn, spotify_songs, False)
+    itunes_tables(cur, conn, itunes_artists, True)
+    itunes_tables(cur, conn, itunes_songs, False)
 

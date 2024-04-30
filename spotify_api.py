@@ -2,7 +2,6 @@
 
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
-import sqlite3
 # spotipy client
 auth_manager = SpotifyClientCredentials()
 sp = spotipy.Spotify(auth_manager=auth_manager)
@@ -106,11 +105,7 @@ def gather_spotify_songs(artists_info):
     return l
 
 # this func populates the database
-def spotify_tables(artists_info, art_table):
-    # set up conn
-    conn = sqlite3.connect('music.db')
-    # set up cur
-    cur = conn.cursor()
+def spotify_tables(cur, conn, artists_info, art_table):
     if art_table:
         # iterate through list until nothing is left
         for i in range(0,25):

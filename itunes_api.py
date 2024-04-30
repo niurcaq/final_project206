@@ -1,7 +1,6 @@
 # itunes api data collecting
 
 import requests
-import sqlite3
 
 def gather_itunes_artist_info(artists):
     # list will hold data
@@ -50,11 +49,7 @@ def gather_itunes_songs(artists_info):
     return l
 
 
-def itunes_tables(artists_info, art_table):
-    # set up conn
-    conn = sqlite3.connect('music.db')
-    # set up cur
-    cur = conn.cursor()
+def itunes_tables(cur, conn, artists_info, art_table):
     if art_table:
         # iterate through list until nothing is left
         for i in range(0,25):
