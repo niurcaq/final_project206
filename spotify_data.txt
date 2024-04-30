@@ -1,0 +1,31 @@
+﻿Genre,Avg Length of Songs(min)
+trap queen,5.32
+outlaw country,4.89
+rock,4.2
+soft rock,4.09
+reggae,3.95
+indie pop,3.85
+country dawn,3.79
+classic oklahoma country,3.79
+rap,3.73
+k-pop,3.71
+country,3.67
+kentucky indie,3.64
+r&b,3.56
+pop,3.5
+maga rap,3.34
+pov: indie,3.29
+modern country pop,3.25
+pop r&b,3.13
+neo soul,3.08
+singer-songwriter pop,3.01
+sad sierreno,2.88
+alt z,2.86
+pop rap,2.85
+None,2.81
+contemporary country,2.76
+reggaeton,2.71
+corrido,2.53
+country rap,2.36
+southern hip hop,2.3
+viral rap,2.1

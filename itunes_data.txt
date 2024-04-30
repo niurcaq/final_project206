@@ -1,0 +1,14 @@
+﻿Genre,Avg Length of Songs(min)
+Rock,5.54
+Metal,5.53
+Hard Rock,4.3
+Urbano latino,4.18
+R&B/Soul,3.67
+Música Mexicana,3.56
+Pop,3.56
+Alternative,3.52
+Country,3.52
+Hip-Hop/Rap,3.21
+K-Pop,3.02
+Reggae,3.02
+Classics,0.91

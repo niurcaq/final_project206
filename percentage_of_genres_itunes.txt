@@ -1,0 +1,14 @@
+﻿Genre,Percentage
+Alternative,9
+Classics,1
+Country,18
+Hard Rock,3
+Hip-Hop/Rap,22
+K-Pop,4
+Metal,1
+Música Mexicana,3
+Pop,22
+R&B/Soul,6
+Reggae,1
+Rock,9
+Urbano latino,1
