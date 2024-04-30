@@ -42,3 +42,4 @@ for i in range(0,4):
     itunes_tables(cur, conn, itunes_artists, True)
     itunes_tables(cur, conn, itunes_songs, False)
 
+conn.close()

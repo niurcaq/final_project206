@@ -34,5 +34,4 @@ def artist_table(cur, conn, artists):
     conn.commit()
     # delete first 25 (to allow for 100 in total but at a rate of 25)
     del artists[:25]
-    # close connection
-    conn.close()
+

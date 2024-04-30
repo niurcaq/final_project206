@@ -8,5 +8,5 @@
 
 def avg_time_per_genre_spotify(cur):
     cur.execute(
-
+        "SELECT length FROM spotify_songs JOIN "
     )

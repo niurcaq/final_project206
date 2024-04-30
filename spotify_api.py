@@ -129,5 +129,3 @@ def spotify_tables(cur, conn, artists_info, art_table):
     conn.commit()
     # delete first 25 (to allow for 100 in total but at a rate of 25)
     del artists_info[:25]
-    # close connection
-    conn.close()
