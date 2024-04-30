@@ -2,29 +2,52 @@
 
 import requests
 
-def gather_itunes_artist_info(artists):
+# this func returns the range of items we will be traversing
+def check_database_entries(cur, table):
+    # find total data entries in database for the table
+    cur.execute(
+        f"SELECT COUNT(*) FROM {table}"
+    )
+    count = cur.fetchone()[0]
+    # return the range 
+    if count == 0:
+        return (0,25)
+    elif count == 25:
+        return (25,50)
+    elif count == 50:
+        return (50,75)
+    elif count == 75:
+        return (75,100)
+    else:
+        # already 100 items in database
+        return None
+
+
+# this func returns data on the artist
+def gather_itunes_artist_info(cur, artists):
     # list will hold data
     l = []
-    # iterate artist names
-    for artist in artists:
-        # search for artist name
-        url = f"https://itunes.apple.com/search?term={artist}&entity=musicArtist&limit=1"
-        res = requests.get(url)
-        # if the request goes through gather the data
-        if res.ok:
+    # check the range of the database
+    r = check_database_entries(cur, 'itunes_artists')
+    # if not none(not 100 values in database)
+    if r != None:
+        # iterate the range
+        for i in range(r[0], r[1]):
+            artist = artists[i]
+            # search for artist name
+            url = f"https://itunes.apple.com/search?term={artist}&entity=musicArtist&limit=1"
+            res = requests.get(url)
             data = res.json()
             # get the itunes id & genre
             it_id = data['results'][0]['artistId']
             gen = data['results'][0]['primaryGenreName']
+            # add to list
             l.append((it_id, gen))
-        else:
-            # if response is error then print error and gather null data
-            print(f"res:{res} for {artist}")
-            l.append((None, None))
     # return the list
     return l
 
 
+# this func returns song info
 def gather_itunes_songs(artists_info):
     # empty list
     l = []
@@ -38,36 +61,34 @@ def gather_itunes_songs(artists_info):
         for d in data['results']:
             # if the result type is a song and its artist is the same
             if d['wrapperType'] == 'track' and d['artistId'] == artist[0]:
-                # set name and duration of song
-                name = d['trackName']
+                # set duration of song
                 dur = d['trackTimeMillis']
                 # add it to the list
-                l.append((name, dur))
+                l.append(dur)
                 # exit because we are only getting the first song
                 break
-    # return the list of songs and their duration
+    # return the list of songs durations
     return l
 
 
-def itunes_tables(cur, conn, artists_info, art_table):
-    if art_table:
+# this func populates the database
+def itunes_tables(cur, conn, artists_info, table):
+    # populating the artists table
+    if table == 'itunes_artists':
         # iterate through list until nothing is left
-        for i in range(0,25):
-            it_id = artists_info[i][0]
-            gen = artists_info[i][1]
+        for artist in artists_info:
+            it_id = artist[0]
+            gen = artist[1]
             # insert artist name into database
             cur.execute(
                 "INSERT OR IGNORE INTO itunes_artists (itunes_id, genre) VALUES (?, ?)", (it_id, gen)
             )
+    # populating the songs table
     else:
-        for i in range(0, 25):
-            name = artists_info[i][0]
-            dur = artists_info[i][1]
-            # insert song info into database
+        for dur in artists_info:
+            # insert dur into database
             cur.execute(
-                "INSERT OR IGNORE INTO itunes_songs (name, length) VALUES (?, ?)", (name, dur)
+                "INSERT OR IGNORE INTO itunes_songs (length) VALUES (?)", (dur, )
             )
     # commit changes
     conn.commit()
-    # delete first 25 (to allow for 100 in total but at a rate of 25)
-    del artists_info[:25]

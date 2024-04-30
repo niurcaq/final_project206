@@ -9,7 +9,7 @@ neo soul,3.08
 country,3.37
 pop,3.45
 r&b,3.56
-rap,3.57
+rap,3.58
 indie,3.58
 k-pop,3.71
 reggae,3.95

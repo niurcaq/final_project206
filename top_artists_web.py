@@ -5,7 +5,7 @@ import requests
 # might need to place this function in a different file because if we call this file four times, it will restart the list every time
 def artist_retrieval():
     # set file to billboard top 100 artists
-    html_url = "https://www.billboard.com/charts/artist-100/"
+    html_url = "https://www.billboard.com/charts/artist-100/2024-04-27/"
     # set request
     res = requests.get(html_url, verify=False)
     # set soup object
@@ -23,15 +23,40 @@ def artist_retrieval():
 
 # this creates a database called music and fills a table with artists from top billboard
 def artist_table(cur, conn, artists):
-    # iterate through list until nothing is left
-    for i in range(0,25):
-        name = artists[i]
-        # insert artist name into database
-        cur.execute(
-            "INSERT OR IGNORE INTO artists (name) VALUES (?)", (name, )
-        )
+    cur.execute(
+        "SELECT COUNT(*) FROM artists"
+    )
+    count = cur.fetchone()
+    if count[0] == 0:
+        # get 0 to 25
+        for i in range(0,25):
+            name = artists[i]
+            # insert artist name into database
+            cur.execute(
+                "INSERT OR IGNORE INTO artists (name) VALUES (?)", (name, )
+            )
+    elif count[0] == 25:
+        # get 25 to 50
+        for i in range(25,50):
+            name = artists[i]
+            # insert artist name into database
+            cur.execute(
+                "INSERT OR IGNORE INTO artists (name) VALUES (?)", (name, )
+            )
+    elif count[0] == 50:
+        for i in range(50,75):
+            name = artists[i]
+            # insert artist name into database
+            cur.execute(
+                "INSERT OR IGNORE INTO artists (name) VALUES (?)", (name, )
+            )
+    else:
+        for i in range(75,100):
+            name = artists[i]
+            # insert artist name into database
+            cur.execute(
+                "INSERT OR IGNORE INTO artists (name) VALUES (?)", (name, )
+            )
+
     # commit changes
     conn.commit()
-    # delete first 25 (to allow for 100 in total but at a rate of 25)
-    del artists[:25]
-

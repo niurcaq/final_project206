@@ -1,0 +1,26 @@
+﻿Artist,Popularity
+Taylor Swift,100
+Beyonce,88
+Morgan Wallen,85
+Future,91
+Metro Boomin,90
+Linkin Park,83
+SZA,87
+Luke Combs,81
+Benson Boone,83
+Zach Bryan,85
+Noah Kahan,83
+TOMORROW X TOGETHER,77
+Ariana Grande,90
+Jelly Roll,74
+Hozier,84
+Teddy Swims,79
+Chris Stapleton,78
+Drake,92
+Dua Lipa,85
+Olivia Rodrigo,86
+Lana Del Rey,87
+Sabrina Carpenter,81
+J. Cole,84
+Travis Scott,90
+The Weeknd,91

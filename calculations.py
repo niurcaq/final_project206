@@ -47,3 +47,14 @@ def genre_percentages_itunes(cur):
         f.write("Genre,Percentage\n")
         for r in rows:
             f.write(f"{r[0]},{r[1]}\n")
+
+def spotify_popularity(cur):
+    cur.execute(
+        "SELECT S.popularity, A.name FROM spotify_artists AS S JOIN artists AS A WHERE A.artist_id=S.artist_id ORDER BY A.artist_id ASC LIMIT 25"
+    )
+    rows = cur.fetchall()
+    # write data into text file
+    with open("spotify_popularity.txt", "w", encoding='utf-8-sig') as f:
+        f.write("Artist,Popularity\n")
+        for r in rows:
+            f.write(f"{r[1]},{r[0]}\n")

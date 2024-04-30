@@ -28,73 +28,66 @@ def shortest_genre(genres):
 
     return minG
 
+
+# this func returns the range of items we will be traversing
+def check_database_entries(cur, table):
+    # find total data entries in database for the table
+    cur.execute(
+        f"SELECT COUNT(*) FROM {table}"
+    )
+    count = cur.fetchone()[0]
+    # return the range 
+    if count == 0:
+        return (0,25)
+    elif count == 25:
+        return (25,50)
+    elif count == 50:
+        return (50,75)
+    elif count == 75:
+        return (75,100)
+    else:
+        # already 100 items in database
+        return None
+
+
 # this func calls spotify api to get data on artists
-def gather_spotify_artist_info(artists):
+def gather_spotify_artist_info(cur, artists):
     # this list will include tuples of info for every artist
     l = []
-    # go through the list of artists
-    for artist in artists:
-        # res contains search results for the artist's name
-        res = sp.search(q='artist:' + artist, type="artist", limit=1)
-        # check if results exist
-        if len(res['artists']['items']) != 0:
-            # get first result 
-            art = res['artists']['items'][0]
-            # set variables to data pieces we need
-            s_id = art['id']
-            genre = shortest_genre(art['genres'])
-            pop = art['popularity']
-            # add the tuples of data to the list
-            l.append((s_id, genre, pop))
-        else:
-            # results did not show up for this search
-            # set data to null
-            s_id = None
-            genre = None
-            pop = None
-            # add tuple of data that has null data
-            l.append((s_id, genre, pop))
+
+    # r represents range we will be traversing
+    r = check_database_entries(cur, 'spotify_artists')
+    # if the range is not None (not 100 data entries in database)
+    if r != None:
+        # iterate the range
+        for i in range(r[0], r[1]):
+            artist = artists[i]
+            # res contains search results for the artist's name
+            res = sp.search(q='artist:' + artist, type="artist", limit=1)
+            # check if results exist
+            if len(res['artists']['items']) != 0:
+                # get first result 
+                art = res['artists']['items'][0]
+                # set variables to data pieces we need
+                s_id = art['id']
+                genre = shortest_genre(art['genres'])
+                pop = art['popularity']
+                # add the tuples of data to the list
+                l.append((s_id, genre, pop))
+
+            else:
+                # results did not show up for this search
+                # set data to null
+                s_id = None
+                genre = None
+                pop = None
+                # add tuple of data that has null data
+                l.append((s_id, genre, pop))
     # return the tuples of data
     return l
 
-        # # check if results exist
-        # if len(res['artists']['items']) != 0:
-        #     # iterate the search results to find corect artist
-        #     for d in res['artists']['items']:
-        #         # if the name matches the artist name continue to retreive data
-        #         if d['name'] == artist:
-        #             # set variables to data pieces we need
-        #             s_id = d['id']
-        #             print(artist)
-        #             genre = shortest_genre(d['genres'])
-        #             pop = d['popularity']
-        #             name = d['name']
-        #             # set exists to  True
-        #             exists = True
-        #             # add the tuples of data to the list
-        #             l.append((name, s_id, genre, pop))
-        #             break
-        #     if exists == False:
-        #         # no results exist
-        #         print(f'No {artist} in results')
-        #         s_id = None
-        #         genre = None
-        #         pop = None
-        #         name = artist
-        #         # add tuple of data that has null data
-        #         l.append((name, s_id, genre, pop))
-        # # results don't exist
-        # else:
-        #     print(f"No results for {artist}")
-        #     # set data to null
-        #     s_id = None
-        #     genre = None
-        #     pop = None
-        #     name = artist
-        #     # add tuple of data that has null data
-        #     l.append((name, s_id, genre, pop))
 
-
+# this func returns songs info
 def gather_spotify_songs(artists_info):
     # list will hold tuples of songs
     l = []
@@ -104,35 +97,34 @@ def gather_spotify_songs(artists_info):
         art = f'spotify:artist:{artist[0]}'
         # find top_tracks
         res = sp.artist_top_tracks(art)
-        name = res['tracks'][0]['name']
         dur = res['tracks'][0]['duration_ms']
-        # add top song name + duration to list
-        l.append((name, dur))
+        # add top song duration to list
+        l.append(dur)
     # return list of tuples
     return l
 
+
 # this func populates the database
-def spotify_tables(cur, conn, artists_info, art_table):
-    if art_table:
-        # iterate through list until nothing is left
-        for i in range(0,25):
-            s_id = artists_info[i][0]
-            gen = artists_info[i][1]
-            pop = artists_info[i][2]
+def spotify_tables(cur, conn, artists_info, table):
+    # we are populating artists here
+    if table == 'spotify_artists':
+        # set tuple data to vars
+        for artist in artists_info:
+            s_id = artist[0]
+            gen = artist[1]
+            pop = artist[2]
             # insert artist info into database
             cur.execute(
-                "INSERT OR IGNORE INTO spotify_artists (spotify_id, genre, popularity) VALUES (?, ?, ?)", (s_id, gen, pop)
+                f"INSERT OR IGNORE INTO {table} (spotify_id, genre, popularity) VALUES (?, ?, ?)", (s_id, gen, pop)
             )
+    # we are populating songs here
     else:
-        #iterate through list until nothing is left
-        for i in range(0, 25):
-            name = artists_info[i][0]
-            dur = artists_info[i][1]
-            # insert song info into database
+        # iterate duration of songs
+        for dur in artists_info:
+            # insert song len into database
             cur.execute(
-                "INSERT OR IGNORE INTO spotify_songs (name, length) VALUES (?, ?)", (name, dur)
+                f"INSERT OR IGNORE INTO {table} (length) VALUES (?)", (dur, )
             )
+
     # commit changes
     conn.commit()
-    # delete first 25 (to allow for 100 in total but at a rate of 25)
-    del artists_info[:25]
